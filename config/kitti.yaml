@@ -1,0 +1,81 @@
+dataset: 'SportsMOT'
+
+dataset_path: './DeepFusionMOT/data/kitti/tracking'
+spilt: 'training'
+# spilt: 'testing'
+
+#------------------------ Root path define ----------------------
+save_path: 'results/kitti'
+eval_save_path: 'results/kitti/data'
+dets_path_3d: "./DeepFusionMOT/data/detections/3D"
+dets_path_2d: "./DeepFusionMOT/data/detections/2D"
+
+
+#------------------------Dataset spilt--------------------------
+#tracking_seqs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+tracking_seqs: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+# tracking_seqs: [0]
+
+
+#----------------------------Detector--------------------------
+# detector_2d: 'rrc'
+detector_2d: 'yolov11'
+detector_3d: 'pointrcnn'
+
+#------------------------predict_diffusion---------------------
+eps: 0.001
+model_dir: './DeepFusionMOT/data/model_dir'
+eval_at: 1200
+diffnet: HMINet
+encoder_dim: 256
+tf_layer: 3
+
+# #-----------------------data_associate-------------------------
+# track_threshold_high_3d: 5
+# track_threshold_low_3d: 0
+# track_threshold_high_2d: 0.6
+# track_threshold_low_2d: 0.1
+
+#----------------------------Category--------------------------
+# cat_list: ['Car', 'Pedestrian']
+cat_list: ['Car']
+
+
+#----------------------------Hyperparameter--------------------------
+#If you want a better result, re-adjust the following hyperparameter
+Car:
+  # metric_3d: iou_3d
+  metric_3d: gdiou_3d
+  # metric_3d: dist_3d
+  # metric_3d: giou_3d
+  # metric_3d: diou_3d
+  metric_2d: iou_2d
+  max_ages: 20      
+  min_frames: 3
+  alpha: 0.5
+  beta: 4
+  cost_function:
+      iou_2d: 0.5   
+      sdiou_2d: 1.1
+      diou_2d: -0.2
+      giou_3d: -0.5
+      iou_3d: 0.005
+      dist_3d: 1.1    
+      gdiou_3d: -0.6   # change 0.5 to 0.6
+      diou_3d: -0.5
+      # iou_dist_2d: 0.5 
+
+Pedestrian:
+  metric_3d: iou_3d
+  metric_2d: iou_2d
+  max_ages: 25
+  min_frames: 3
+  alpha: 0.5
+  beta: 4
+  cost_function:
+      iou_2d: 0.5
+      sdiou_2d: 0.2
+      giou_3d: -0.2
+      iou_3d: 0.01
+      dist_3d: 1.1
+
